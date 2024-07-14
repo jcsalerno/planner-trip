@@ -49,6 +49,8 @@ public class TripController {
             rawTrip.setStartsAt(LocalDateTime.parse(payload.starts_at()));
             rawTrip.setDestination(payload.destination());
 
+            this.repository.save(rawTrip);
+
             return ResponseEntity.ok(rawTrip);
 
         }
