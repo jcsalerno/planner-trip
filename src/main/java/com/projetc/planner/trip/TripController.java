@@ -1,4 +1,7 @@
 package com.projetc.planner.trip;
+import com.projetc.planner.activities.ActivityRequestPayload;
+import com.projetc.planner.activities.ActivityResponse;
+import com.projetc.planner.activities.ActivityService;
 import com.projetc.planner.participant.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +17,9 @@ public class TripController {
 
     @Autowired
     private ParticipantService participantService;
+
+    @Autowired
+    private ActivityService activityService;
 
     @Autowired
     private TripRepository repository;
@@ -68,13 +74,15 @@ public class TripController {
     }
 
     @PostMapping("/{id}/invite")
-    public ResponseEntity<ParticipantCreateResponse> inviteParticipant(@PathVariable UUID id, @RequestBody ParticipantRequestPayload payload) {
+    public ResponseEntity<ParticipantCreateResponse>
+    inviteParticipant(@PathVariable UUID id, @RequestBody ParticipantRequestPayload payload) {
         Optional<Trip> trip = this.repository.findById(id);
 
         if (trip.isPresent()){
             Trip rawTrip = trip.get();
 
-            ParticipantCreateResponse participantResponse = this.participantService.registerParticipantToEvent(payload.email(), rawTrip);
+            ParticipantCreateResponse participantResponse = this.participantService.
+                    registerParticipantToEvent(payload.email(), rawTrip);
 
             if (rawTrip.getIsConfirmed()) {
                 this.participantService.triggerConfirmationEmailToParticipant(payload.email());
@@ -83,7 +91,24 @@ public class TripController {
         }
 
         return ResponseEntity.notFound().build();
+
     }
+
+    @PostMapping("/{id}/activities")
+    public ResponseEntity<ActivityResponse> registerActivity(@PathVariable UUID id, @RequestBody ActivityRequestPayload payload) {
+        Optional<Trip> trip = this.repository.findById(id);
+
+        if (trip.isPresent()){
+            Trip rawTrip = trip.get();
+
+            ActivityResponse activityResponse = this.activityService.registerActivity(payload, rawTrip);
+
+            return ResponseEntity.ok(activityResponse);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
 
     @GetMapping("/{id}/participants")
     public ResponseEntity<List<ParticipantData>> getAllParticipants(@PathVariable UUID id) {
