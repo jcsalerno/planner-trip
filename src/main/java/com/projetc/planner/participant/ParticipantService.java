@@ -26,8 +26,19 @@ public class ParticipantService {
 
     }
 
+    public ParticipantCreateResponse registerParticipantToEvent(String email, Trip trip){
+        Participant newParticipant = new Participant(email, trip);
+        this.repository.save(newParticipant);
+
+        return new ParticipantCreateResponse(newParticipant.getId());
+    }
+
     // Método para enviar email de confirmação para participantes
     public void triggerConfirmationEmailToParticipants(UUID tripId){
         // Implementação do método
+    }
+
+    public void triggerConfirmationEmailToParticipant(String email) {
+
     }
 }
