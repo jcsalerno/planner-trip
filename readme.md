@@ -1,6 +1,6 @@
 # Planner Project
 
-O Planner Project é um sistema de planejamento de viagens desenvolvido com Spring Boot. Ele permite gerenciar viagens, atividades, participantes e links relacionados às viagens. A seguir, você encontrará uma visão geral de como o projeto funciona, suas funcionalidades e como ele é estruturado.
+O Planner Project é um sistema de planejamento de viagens desenvolvido em parceria com a Rocketseat, utilizando Spring Boot. Ele permite gerenciar viagens, atividades, participantes e links relacionados às viagens. A seguir, você encontrará uma visão geral de como o projeto funciona, suas funcionalidades e como ele é estruturado.
 
 ## Funcionalidades Principais
 
