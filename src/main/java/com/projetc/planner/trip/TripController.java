@@ -1,4 +1,5 @@
 package com.projetc.planner.trip;
+import com.projetc.planner.activities.ActivityData;
 import com.projetc.planner.activities.ActivityRequestPayload;
 import com.projetc.planner.activities.ActivityResponse;
 import com.projetc.planner.activities.ActivityService;
@@ -73,6 +74,29 @@ public class TripController {
 
     }
 
+    @PostMapping("/{id}/activities")
+    public ResponseEntity<ActivityResponse> registerActivity(@PathVariable UUID id, @RequestBody ActivityRequestPayload payload) {
+        Optional<Trip> trip = this.repository.findById(id);
+
+        if (trip.isPresent()){
+            Trip rawTrip = trip.get();
+
+            ActivityResponse activityResponse = this.activityService.registerActivity(payload, rawTrip);
+
+            return ResponseEntity.ok(activityResponse);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{id}/activities")
+    public ResponseEntity<List<ActivityData>> getAllActivities(@PathVariable UUID id) {
+        List<ActivityData> activityDataList = this.activityService.getAllActivitiesFromId(id);
+
+        return ResponseEntity.ok(activityDataList);
+    }
+
+
     @PostMapping("/{id}/invite")
     public ResponseEntity<ParticipantCreateResponse>
     inviteParticipant(@PathVariable UUID id, @RequestBody ParticipantRequestPayload payload) {
@@ -94,20 +118,8 @@ public class TripController {
 
     }
 
-    @PostMapping("/{id}/activities")
-    public ResponseEntity<ActivityResponse> registerActivity(@PathVariable UUID id, @RequestBody ActivityRequestPayload payload) {
-        Optional<Trip> trip = this.repository.findById(id);
 
-        if (trip.isPresent()){
-            Trip rawTrip = trip.get();
 
-            ActivityResponse activityResponse = this.activityService.registerActivity(payload, rawTrip);
-
-            return ResponseEntity.ok(activityResponse);
-        }
-
-        return ResponseEntity.notFound().build();
-    }
 
 
     @GetMapping("/{id}/participants")
@@ -116,14 +128,6 @@ public class TripController {
 
         return ResponseEntity.ok(participantList);
     }
-
-
-
-
-
-
-
-
 
 
 }
