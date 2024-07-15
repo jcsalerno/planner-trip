@@ -3,6 +3,9 @@ import com.projetc.planner.activity.ActivityData;
 import com.projetc.planner.activity.ActivityRequestPayload;
 import com.projetc.planner.activity.ActivityResponse;
 import com.projetc.planner.activity.ActivityService;
+import com.projetc.planner.link.LinkRequestPayload;
+import com.projetc.planner.link.LinkResponse;
+import com.projetc.planner.link.LinkService;
 import com.projetc.planner.participant.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +28,10 @@ public class TripController {
     @Autowired
     private TripRepository repository;
 
+    @Autowired
+    private LinkService linkService;
+
+
     @PostMapping
     public ResponseEntity<TripCreateResponse> createTrip(@RequestBody TripRequestPayload payload) {
         Trip newTrip = new Trip(payload);
@@ -33,6 +40,8 @@ public class TripController {
         return ResponseEntity.ok(new TripCreateResponse(newTrip.getId()));
 
     }
+
+    // TRIP
 
     @GetMapping("/{id}")
     public ResponseEntity<Trip> getTripDetails(@PathVariable UUID id) {
@@ -74,6 +83,8 @@ public class TripController {
 
     }
 
+    // ACTIVITIES
+
     @PostMapping("/{id}/activities")
     public ResponseEntity<ActivityResponse> registerActivity(@PathVariable UUID id, @RequestBody ActivityRequestPayload payload) {
         Optional<Trip> trip = this.repository.findById(id);
@@ -95,6 +106,8 @@ public class TripController {
 
         return ResponseEntity.ok(activityDataList);
     }
+
+    // PARTICIPANTS
 
 
     @PostMapping("/{id}/invite")
@@ -120,14 +133,30 @@ public class TripController {
 
 
 
-
-
     @GetMapping("/{id}/participants")
     public ResponseEntity<List<ParticipantData>> getAllParticipants(@PathVariable UUID id) {
         List<ParticipantData> participantList = this.participantService.getAllParticipantsFromEvent(id);
 
         return ResponseEntity.ok(participantList);
     }
+
+
+    // LINKS
+
+
+    @PostMapping("/{id}/links")
+    public ResponseEntity<LinkResponse> registerLink(@PathVariable UUID id, @RequestBody LinkRequestPayload payload) {
+        Optional<Trip> tripOptional = repository.findById(id);
+
+        if (tripOptional.isPresent()) {
+            Trip rawTrip = tripOptional.get();
+            LinkResponse linkResponse = linkService.registerLink(payload, rawTrip);
+            return ResponseEntity.ok(linkResponse);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
 
 
 }
