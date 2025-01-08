@@ -113,6 +113,7 @@ O projeto é dividido em pacotes que representam as principais funcionalidades:
 - **Flyway**: Para migração de banco de dados.
 - **H2 Database**: Banco de dados em memória para desenvolvimento e testes.
 - **Lombok**: Biblioteca para reduzir o boilerplate de código Java.
+  
  <p align="center">
   <a href="https://skillicons.dev">
     <img src="https://skillicons.dev/icons?i=java,postman,spring,hibernate,idea" />
