@@ -115,7 +115,7 @@ O projeto é dividido em pacotes que representam as principais funcionalidades:
 - **Lombok**: Biblioteca para reduzir o boilerplate de código Java.
   
 
-
+<h3 align="center"> ⚒️ Tecnologias ⚒️</h3>
 <p align="center">
   <a href="https://skillicons.dev">
     <img src="https://skillicons.dev/icons?i=java,spring,postman,idea,hibernate" />
